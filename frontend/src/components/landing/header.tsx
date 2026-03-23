@@ -28,7 +28,7 @@ export function Header() {
         >
           <a href="https://github.com/bytedance/deer-flow" target="_blank">
             <GitHubLogoIcon className="size-4" />
-            Star on GitHub
+            GitHub 点赞
             {env.NEXT_PUBLIC_STATIC_WEBSITE_ONLY === "true" &&
               env.GITHUB_OAUTH_TOKEN && <StarCounter />}
           </a>
@@ -40,7 +40,7 @@ export function Header() {
 }
 
 async function StarCounter() {
-  let stars = 10000; // Default value
+  let stars = 10000;
 
   try {
     const response = await fetch(
@@ -60,7 +60,7 @@ async function StarCounter() {
 
     if (response.ok) {
       const data = await response.json();
-      stars = data.stargazers_count ?? stars; // Update stars if API response is valid
+      stars = data.stargazers_count ?? stars;
     }
   } catch (error) {
     console.error("Error fetching GitHub stars:", error);
