@@ -1,0 +1,97 @@
+openapi: 3.1.0
+info:
+  title: Jobs2Go Payments API
+  version: 1.0.0
+servers:
+  - url: https://api.jobs2go.local
+paths:
+  /v1/payments/escrow/authorize:
+    post:
+      summary: Authorize escrow payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EscrowAuthorizeRequest'
+      responses:
+        '200':
+          description: Escrow authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+  /v1/payments/escrow/release:
+    post:
+      summary: Release escrow payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EscrowReleaseRequest'
+      responses:
+        '200':
+          description: Escrow released
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+  /v1/payments/{paymentId}:
+    get:
+      summary: Get payment details
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+components:
+  schemas:
+    EscrowAuthorizeRequest:
+      type: object
+      required: [booking_id, payment_method_id, amount_cents, currency]
+      properties:
+        booking_id:
+          type: string
+          format: uuid
+        payment_method_id:
+          type: string
+        amount_cents:
+          type: integer
+        currency:
+          type: string
+          example: USD
+    EscrowReleaseRequest:
+      type: object
+      required: [booking_id]
+      properties:
+        booking_id:
+          type: string
+          format: uuid
+    Payment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        booking_id:
+          type: string
+          format: uuid
+        escrow_status:
+          type: string
+          enum: [authorized, captured, released, refunded, failed]
+        gross_amount_cents:
+          type: integer
+        platform_fee_cents:
+          type: integer
+        worker_payout_cents:
+          type: integer

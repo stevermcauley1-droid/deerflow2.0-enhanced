@@ -1,0 +1,114 @@
+openapi: 3.1.0
+info:
+  title: Jobs2Go Offers and Bookings API
+  version: 1.0.0
+servers:
+  - url: https://api.jobs2go.local
+paths:
+  /v1/jobs/{jobId}/offers:
+    post:
+      summary: Send offer to worker
+      parameters:
+        - $ref: '#/components/parameters/JobId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOfferRequest'
+      responses:
+        '201':
+          description: Offer created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+  /v1/offers/{offerId}/accept:
+    post:
+      summary: Accept offer
+      parameters:
+        - $ref: '#/components/parameters/OfferId'
+      responses:
+        '200':
+          description: Offer updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+  /v1/offers/{offerId}/decline:
+    post:
+      summary: Decline offer
+      parameters:
+        - $ref: '#/components/parameters/OfferId'
+      responses:
+        '200':
+          description: Offer updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+  /v1/jobs/{jobId}/start:
+    post:
+      summary: Start job
+      parameters:
+        - $ref: '#/components/parameters/JobId'
+      responses:
+        '200':
+          description: Job started
+  /v1/jobs/{jobId}/complete:
+    post:
+      summary: Complete job
+      parameters:
+        - $ref: '#/components/parameters/JobId'
+      responses:
+        '200':
+          description: Job completed
+components:
+  parameters:
+    JobId:
+      name: jobId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    OfferId:
+      name: offerId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    CreateOfferRequest:
+      type: object
+      required: [worker_id, proposed_amount_cents]
+      properties:
+        worker_id:
+          type: string
+          format: uuid
+        message:
+          type: string
+        proposed_amount_cents:
+          type: integer
+        currency:
+          type: string
+          example: USD
+        expires_at:
+          type: string
+          format: date-time
+    Offer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        job_id:
+          type: string
+          format: uuid
+        worker_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [pending, accepted, declined, expired, cancelled]

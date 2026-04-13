@@ -1,0 +1,7 @@
+{
+  "worker_id": "4f8ca5c0-8c08-4da3-88c6-a5bcf39ddf39",
+  "message": "Can you start in 45 minutes?",
+  "proposed_amount_cents": 12000,
+  "currency": "USD",
+  "expires_at": "2026-04-12T13:00:00Z"
+}

@@ -1,0 +1,144 @@
+openapi: 3.1.0
+info:
+  title: Jobs2Go Worker Profile API
+  version: 1.0.0
+servers:
+  - url: https://api.jobs2go.local
+paths:
+  /v1/workers/{workerId}/profile:
+    put:
+      summary: Upsert worker profile
+      parameters:
+        - $ref: '#/components/parameters/WorkerId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkerProfileUpsert'
+      responses:
+        '200':
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkerProfile'
+    get:
+      summary: Get worker profile
+      parameters:
+        - $ref: '#/components/parameters/WorkerId'
+      responses:
+        '200':
+          description: Worker profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkerProfile'
+  /v1/workers/{workerId}/skills:
+    put:
+      summary: Replace worker skills
+      parameters:
+        - $ref: '#/components/parameters/WorkerId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [skills]
+              properties:
+                skills:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/WorkerSkillInput'
+      responses:
+        '200':
+          description: Skills updated
+  /v1/workers/{workerId}/availability:
+    put:
+      summary: Update worker availability
+      parameters:
+        - $ref: '#/components/parameters/WorkerId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvailabilityUpdate'
+      responses:
+        '200':
+          description: Availability updated
+components:
+  parameters:
+    WorkerId:
+      name: workerId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    WorkerProfileUpsert:
+      type: object
+      required: [display_name]
+      properties:
+        display_name:
+          type: string
+        bio:
+          type: string
+        intro_video_url:
+          type: string
+          format: uri
+        location_lat:
+          type: number
+        location_lng:
+          type: number
+        service_radius_km:
+          type: number
+    WorkerProfile:
+      type: object
+      properties:
+        user_id:
+          type: string
+          format: uuid
+        display_name:
+          type: string
+        bio:
+          type: string
+        intro_video_url:
+          type: string
+          format: uri
+        is_available_now:
+          type: boolean
+        reliability_score:
+          type: number
+        rating_avg:
+          type: number
+    WorkerSkillInput:
+      type: object
+      required: [skill_code, level]
+      properties:
+        skill_code:
+          type: string
+        level:
+          type: string
+          enum: [hobbyist, experienced, expert]
+    AvailabilityUpdate:
+      type: object
+      properties:
+        is_available_now:
+          type: boolean
+        slots:
+          type: array
+          items:
+            type: object
+            required: [starts_at, ends_at]
+            properties:
+              starts_at:
+                type: string
+                format: date-time
+              ends_at:
+                type: string
+                format: date-time
+              timezone:
+                type: string

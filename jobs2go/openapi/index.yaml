@@ -1,0 +1,14 @@
+openapi: 3.1.0
+info:
+  title: Jobs2Go API Contract Manifest
+  version: 1.0.0
+  description: Domain-split contract package for Jobs2Go pilot.
+paths: {}
+components: {}
+x-domain-specs:
+  auth: domains/auth.yaml
+  workers: domains/workers.yaml
+  jobs_matching: domains/jobs-matching.yaml
+  offers_bookings: domains/offers-bookings.yaml
+  payments: domains/payments.yaml
+  chat_reviews_trust: domains/chat-reviews-trust.yaml

@@ -1,3 +1,31 @@
-from . import artifacts, mcp, models, skills, suggestions, uploads
+from . import (
+	artifacts,
+	jobs2go_auth,
+	jobs2go_chat_reviews_trust,
+	jobs2go_jobs_matching,
+	jobs2go_offers_bookings,
+	jobs2go_ops,
+	jobs2go_payments,
+	jobs2go_workers,
+	mcp,
+	models,
+	skills,
+	suggestions,
+	uploads,
+)
 
-__all__ = ["artifacts", "mcp", "models", "skills", "suggestions", "uploads"]
+__all__ = [
+	"artifacts",
+	"jobs2go_auth",
+	"jobs2go_chat_reviews_trust",
+	"jobs2go_jobs_matching",
+	"jobs2go_offers_bookings",
+	"jobs2go_ops",
+	"jobs2go_payments",
+	"jobs2go_workers",
+	"mcp",
+	"models",
+	"skills",
+	"suggestions",
+	"uploads",
+]

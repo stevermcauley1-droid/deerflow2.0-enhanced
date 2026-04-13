@@ -1,0 +1,29 @@
+app:
+  name: jobs2go
+  mode: development
+  region: pilot-city-1
+  language: en-US
+  currency: USD
+
+database:
+  host: localhost
+  port: 5432
+  name: jobs2go
+  user: jobs2go
+  password_env: JOBS2GO_DB_PASSWORD
+
+security:
+  jwt_issuer: jobs2go-local
+  jwt_audience: jobs2go-app
+  jwt_secret_env: JOBS2GO_JWT_SECRET
+
+integrations:
+  kyc_provider: stub
+  payments_provider: stub
+  notifications_provider: stub
+
+feature_flags:
+  enable_chat: true
+  enable_reviews: true
+  enable_trust_queue: true
+  enable_government_reporting_v1: false

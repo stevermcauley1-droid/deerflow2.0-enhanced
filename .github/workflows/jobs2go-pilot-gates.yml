@@ -1,0 +1,43 @@
+name: Jobs2Go Pilot Gates
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - "backend/app/gateway/routers/jobs2go_*.py"
+      - "backend/tests/test_jobs2go_pilot_services.py"
+      - "jobs2go/**"
+      - ".github/workflows/jobs2go-pilot-gates.yml"
+
+concurrency:
+  group: jobs2go-gates-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  jobs2go-gates:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: uv sync --group dev
+
+      - name: Run Jobs2Go backend gate
+        working-directory: backend
+        run: make gate-jobs2go
+
+      - name: Validate Jobs2Go OpenAPI example payloads
+        run: python jobs2go/scripts/validate_openapi_examples.py

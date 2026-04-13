@@ -1,0 +1,8 @@
+{
+  "id": "1f376dd4-5123-4ab8-bcef-b0e429f2d955",
+  "booking_id": "3a502743-c5e7-4662-aafc-9ccaf1984084",
+  "escrow_status": "authorized",
+  "gross_amount_cents": 12000,
+  "platform_fee_cents": 1800,
+  "worker_payout_cents": 10200
+}

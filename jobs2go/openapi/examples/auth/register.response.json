@@ -1,0 +1,8 @@
+{
+  "access_token": "eyJhbGci...",
+  "refresh_token": "eyJhbGci...",
+  "user": {
+    "id": "31aaf7b9-6f85-41bc-8b09-f863b0e10bb7",
+    "role": "employer"
+  }
+}

@@ -10,6 +10,13 @@ gateway:
 test:
 	PYTHONPATH=. uv run pytest tests/ -v
 
+test-jobs2go:
+	PYTHONPATH=. uv run pytest tests/test_jobs2go_pilot_services.py -v
+
+gate-jobs2go:
+	uvx ruff check app/gateway/routers/jobs2go_*.py tests/test_jobs2go_pilot_services.py
+	PYTHONPATH=. uv run pytest tests/test_jobs2go_pilot_services.py -v
+
 lint:
 	uvx ruff check .
 

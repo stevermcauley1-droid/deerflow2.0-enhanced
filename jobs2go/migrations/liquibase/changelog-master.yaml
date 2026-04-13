@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: changesets/001-jobs2go-core.yaml
+      relativeToChangelogFile: true

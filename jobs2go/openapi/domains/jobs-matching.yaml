@@ -1,0 +1,198 @@
+openapi: 3.1.0
+info:
+  title: Jobs2Go Jobs and Matching API
+  version: 1.0.0
+servers:
+  - url: https://api.jobs2go.local
+paths:
+  /v1/jobs/parse:
+    post:
+      summary: Parse free-text job intent into structured draft
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobParseRequest'
+      responses:
+        '200':
+          description: Parsed job draft
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobParseResponse'
+  /v1/jobs:
+    post:
+      summary: Create job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobCreateRequest'
+      responses:
+        '201':
+          description: Job created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+  /v1/jobs/{jobId}:
+    get:
+      summary: Get job by ID
+      parameters:
+        - $ref: '#/components/parameters/JobId'
+      responses:
+        '200':
+          description: Job
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+  /v1/match/jobs/{jobId}/candidates:
+    post:
+      summary: Generate ranked candidates
+      parameters:
+        - $ref: '#/components/parameters/JobId'
+      responses:
+        '200':
+          description: Match response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchResponse'
+components:
+  parameters:
+    JobId:
+      name: jobId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    JobParseRequest:
+      type: object
+      required: [input_text]
+      properties:
+        input_text:
+          type: string
+        location_hint:
+          type: string
+    JobParseResponse:
+      type: object
+      properties:
+        title:
+          type: string
+        category_code:
+          type: string
+        skills_required:
+          type: array
+          items:
+            type: string
+        skill_level:
+          type: string
+          enum: [hobbyist, experienced, expert]
+        location_mode:
+          type: string
+          enum: [onsite, remote, hybrid]
+        budget_type:
+          type: string
+          enum: [hourly, daily, fixed]
+        budget_min_cents:
+          type: integer
+        budget_max_cents:
+          type: integer
+        start_window_from:
+          type: string
+          format: date-time
+        start_window_to:
+          type: string
+          format: date-time
+        confidence:
+          type: number
+        clarifications:
+          type: array
+          items:
+            type: string
+    JobCreateRequest:
+      type: object
+      required: [title, description, category_code, location_mode]
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        category_code:
+          type: string
+        skill_level:
+          type: string
+          enum: [hobbyist, experienced, expert]
+        location_mode:
+          type: string
+          enum: [onsite, remote, hybrid]
+        location_lat:
+          type: number
+        location_lng:
+          type: number
+        start_window_from:
+          type: string
+          format: date-time
+        start_window_to:
+          type: string
+          format: date-time
+        urgency:
+          type: string
+          enum: [now, same_day, scheduled]
+        budget_type:
+          type: string
+          enum: [hourly, daily, fixed]
+        budget_min_cents:
+          type: integer
+        budget_max_cents:
+          type: integer
+        currency:
+          type: string
+          example: USD
+    Job:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        employer_id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    MatchResponse:
+      type: object
+      properties:
+        job_id:
+          type: string
+          format: uuid
+        candidates:
+          type: array
+          items:
+            type: object
+            properties:
+              worker_id:
+                type: string
+                format: uuid
+              score:
+                type: number
+              eta_minutes:
+                type: integer
+              price_hourly_cents:
+                type: integer
+              why:
+                type: array
+                items:
+                  type: string

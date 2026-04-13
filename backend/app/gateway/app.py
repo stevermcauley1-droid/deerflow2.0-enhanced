@@ -9,6 +9,13 @@ from app.gateway.routers import (
     agents,
     artifacts,
     channels,
+    jobs2go_auth,
+    jobs2go_chat_reviews_trust,
+    jobs2go_jobs_matching,
+    jobs2go_offers_bookings,
+    jobs2go_ops,
+    jobs2go_payments,
+    jobs2go_workers,
     mcp,
     memory,
     models,
@@ -140,6 +147,34 @@ This gateway provides custom endpoints for models, MCP configuration, skills, an
                 "description": "Manage IM channel integrations (Feishu, Slack, Telegram)",
             },
             {
+                "name": "jobs2go-auth",
+                "description": "Jobs2Go auth and KYC pilot endpoints",
+            },
+            {
+                "name": "jobs2go-workers",
+                "description": "Jobs2Go worker profile pilot endpoints",
+            },
+            {
+                "name": "jobs2go-jobs-matching",
+                "description": "Jobs2Go jobs and matching pilot endpoints",
+            },
+            {
+                "name": "jobs2go-offers-bookings",
+                "description": "Jobs2Go offers and bookings pilot endpoints",
+            },
+            {
+                "name": "jobs2go-payments",
+                "description": "Jobs2Go payments and escrow pilot endpoints",
+            },
+            {
+                "name": "jobs2go-chat-reviews-trust",
+                "description": "Jobs2Go chat, reviews, and trust pilot endpoints",
+            },
+            {
+                "name": "jobs2go-ops",
+                "description": "Jobs2Go pilot operations and KPI dashboard endpoints",
+            },
+            {
                 "name": "health",
                 "description": "Health check and system status endpoints",
             },
@@ -175,6 +210,15 @@ This gateway provides custom endpoints for models, MCP configuration, skills, an
 
     # Channels API is mounted at /api/channels
     app.include_router(channels.router)
+
+    # Jobs2Go pilot APIs are mounted at /v1/*
+    app.include_router(jobs2go_auth.router)
+    app.include_router(jobs2go_workers.router)
+    app.include_router(jobs2go_jobs_matching.router)
+    app.include_router(jobs2go_offers_bookings.router)
+    app.include_router(jobs2go_payments.router)
+    app.include_router(jobs2go_chat_reviews_trust.router)
+    app.include_router(jobs2go_ops.router)
 
     @app.get("/health", tags=["health"])
     async def health_check() -> dict:

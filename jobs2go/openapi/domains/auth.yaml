@@ -1,0 +1,120 @@
+openapi: 3.1.0
+info:
+  title: Jobs2Go Auth and KYC API
+  version: 1.0.0
+servers:
+  - url: https://api.jobs2go.local
+paths:
+  /v1/auth/register:
+    post:
+      summary: Register user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+  /v1/auth/login:
+    post:
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+  /v1/kyc/start:
+    post:
+      summary: Start KYC flow
+      responses:
+        '200':
+          description: KYC session started
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  verification_url:
+                    type: string
+                    format: uri
+  /v1/users/{userId}/verification:
+    get:
+      summary: Get verification status
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Verification status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationStatus'
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      required: [role, email, password]
+      properties:
+        role:
+          type: string
+          enum: [employer, worker, both]
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        password:
+          type: string
+          minLength: 8
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    AuthResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            role:
+              type: string
+    VerificationStatus:
+      type: object
+      properties:
+        kyc_status:
+          type: string
+          enum: [unverified, pending, verified, failed]
+        background_check_status:
+          type: string
+          enum: [not_requested, pending, passed, failed]

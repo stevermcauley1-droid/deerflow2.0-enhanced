@@ -1,0 +1,14 @@
+{
+  "title": "Assemble 3-door wardrobe",
+  "description": "Need assembly completed this afternoon.",
+  "category_code": "home_services.furniture_assembly",
+  "skill_level": "experienced",
+  "location_mode": "onsite",
+  "location_lat": 40.7128,
+  "location_lng": -74.006,
+  "urgency": "same_day",
+  "budget_type": "hourly",
+  "budget_min_cents": 5000,
+  "budget_max_cents": 7000,
+  "currency": "USD"
+}

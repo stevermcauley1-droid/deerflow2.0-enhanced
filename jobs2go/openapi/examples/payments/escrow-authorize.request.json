@@ -1,0 +1,6 @@
+{
+  "booking_id": "3a502743-c5e7-4662-aafc-9ccaf1984084",
+  "payment_method_id": "pm_card_visa",
+  "amount_cents": 12000,
+  "currency": "USD"
+}

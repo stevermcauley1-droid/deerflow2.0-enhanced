@@ -1,0 +1,160 @@
+openapi: 3.1.0
+info:
+  title: Jobs2Go Chat, Reviews, and Trust API
+  version: 1.0.0
+servers:
+  - url: https://api.jobs2go.local
+paths:
+  /v1/chats/{chatId}/messages:
+    get:
+      summary: List chat messages
+      parameters:
+        - $ref: '#/components/parameters/ChatId'
+      responses:
+        '200':
+          description: Message list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Message'
+    post:
+      summary: Send chat message
+      parameters:
+        - $ref: '#/components/parameters/ChatId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessageRequest'
+      responses:
+        '201':
+          description: Message created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /v1/reviews:
+    post:
+      summary: Submit review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewCreateRequest'
+      responses:
+        '201':
+          description: Review created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+  /v1/trust/reports:
+    post:
+      summary: Submit abuse or fraud report
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrustReportRequest'
+      responses:
+        '201':
+          description: Report received
+components:
+  parameters:
+    ChatId:
+      name: chatId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    SendMessageRequest:
+      type: object
+      required: [message_type]
+      properties:
+        message_type:
+          type: string
+          enum: [text, image, video]
+        body:
+          type: string
+        attachment_url:
+          type: string
+          format: uri
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        chat_id:
+          type: string
+          format: uuid
+        sender_id:
+          type: string
+          format: uuid
+        message_type:
+          type: string
+        body:
+          type: string
+        attachment_url:
+          type: string
+          format: uri
+        created_at:
+          type: string
+          format: date-time
+    ReviewCreateRequest:
+      type: object
+      required: [booking_id, reviewee_id, rating]
+      properties:
+        booking_id:
+          type: string
+          format: uuid
+        reviewee_id:
+          type: string
+          format: uuid
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        comment:
+          type: string
+    Review:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        booking_id:
+          type: string
+          format: uuid
+        reviewer_id:
+          type: string
+          format: uuid
+        reviewee_id:
+          type: string
+          format: uuid
+        rating:
+          type: integer
+    TrustReportRequest:
+      type: object
+      required: [target_user_id, reason_code]
+      properties:
+        target_user_id:
+          type: string
+          format: uuid
+        job_id:
+          type: string
+          format: uuid
+        reason_code:
+          type: string
+        description:
+          type: string

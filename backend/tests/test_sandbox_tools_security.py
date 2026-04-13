@@ -23,6 +23,10 @@ _THREAD_DATA = {
 }
 
 
+def _norm_path(value: str) -> str:
+    return value.replace("\\", "/")
+
+
 # ---------- replace_virtual_path ----------
 
 
@@ -140,7 +144,7 @@ def test_resolve_skills_path_resolves_correctly() -> None:
         patch("deerflow.sandbox.tools._get_skills_host_path", return_value="/home/user/deer-flow/skills"),
     ):
         resolved = _resolve_skills_path("/mnt/skills/public/bootstrap/SKILL.md")
-        assert resolved == "/home/user/deer-flow/skills/public/bootstrap/SKILL.md"
+        assert _norm_path(resolved) == "/home/user/deer-flow/skills/public/bootstrap/SKILL.md"
 
 
 def test_resolve_skills_path_resolves_root() -> None:
@@ -150,7 +154,7 @@ def test_resolve_skills_path_resolves_root() -> None:
         patch("deerflow.sandbox.tools._get_skills_host_path", return_value="/home/user/deer-flow/skills"),
     ):
         resolved = _resolve_skills_path("/mnt/skills")
-        assert resolved == "/home/user/deer-flow/skills"
+        assert _norm_path(resolved) == "/home/user/deer-flow/skills"
 
 
 def test_resolve_skills_path_raises_when_not_configured() -> None:
@@ -205,7 +209,7 @@ def test_replace_virtual_paths_in_command_replaces_skills_paths() -> None:
         cmd = "cat /mnt/skills/public/bootstrap/SKILL.md"
         result = replace_virtual_paths_in_command(cmd, _THREAD_DATA)
         assert "/mnt/skills" not in result
-        assert "/home/user/deer-flow/skills/public/bootstrap/SKILL.md" in result
+        assert "/home/user/deer-flow/skills/public/bootstrap/SKILL.md" in _norm_path(result)
 
 
 def test_replace_virtual_paths_in_command_replaces_both() -> None:
@@ -218,8 +222,9 @@ def test_replace_virtual_paths_in_command_replaces_both() -> None:
         result = replace_virtual_paths_in_command(cmd, _THREAD_DATA)
         assert "/mnt/skills" not in result
         assert "/mnt/user-data" not in result
-        assert "/home/user/skills/public/SKILL.md" in result
-        assert "/tmp/deer-flow/threads/t1/user-data/workspace/out.txt" in result
+        normalized = _norm_path(result)
+        assert "/home/user/skills/public/SKILL.md" in normalized
+        assert "/tmp/deer-flow/threads/t1/user-data/workspace/out.txt" in normalized
 
 
 # ---------- validate_local_bash_command_paths ----------

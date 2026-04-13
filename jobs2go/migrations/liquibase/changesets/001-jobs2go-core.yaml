@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-jobs2go-core
+      author: copilot
+      context: jobs2go
+      comment: Apply Jobs2Go core schema via Flyway SQL source
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: users
+      changes:
+        - sqlFile:
+            path: ../../flyway/V20260411_001__jobs2go_core.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            stripComments: false
+      rollback:
+        - sql:
+            sql: |
+              -- Destructive rollback intentionally omitted for pilot safety.
+              -- Use forward-only migrations to evolve schema.

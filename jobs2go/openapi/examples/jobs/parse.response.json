@@ -1,0 +1,16 @@
+{
+  "title": "Assemble 3-door wardrobe",
+  "category_code": "home_services.furniture_assembly",
+  "skills_required": [
+    "furniture_assembly"
+  ],
+  "skill_level": "experienced",
+  "location_mode": "onsite",
+  "budget_type": "hourly",
+  "budget_min_cents": 5000,
+  "budget_max_cents": 7000,
+  "start_window_from": "2026-04-12T15:00:00Z",
+  "start_window_to": "2026-04-12T18:00:00Z",
+  "confidence": 0.91,
+  "clarifications": []
+}
