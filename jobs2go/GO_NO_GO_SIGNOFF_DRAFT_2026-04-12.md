@@ -29,7 +29,7 @@ Launch commander: TBD
 - Ops dashboard refresh verified: YES
 
 ## Decision
-Decision: PENDING
+Status: GO ✅
 Decision time: TBD
 Notes:
 - Local technical gates and smoke checks are green.
